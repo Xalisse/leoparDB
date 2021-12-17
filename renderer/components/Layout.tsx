@@ -1,24 +1,9 @@
-import React, { ReactNode } from 'react'
-import Head from 'next/head'
+import React, { ReactNode } from "react";
 
 type Props = {
-  children: ReactNode
-  title?: string
-}
+  children: ReactNode;
+};
 
-const Layout = ({ children, title = 'This is the default title' }: Props) => (
-  <div>
-    <Head>
-      <title>{title}</title>
-      <meta charSet="utf-8" />
-      <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-    </Head>
-    <header>
-      <nav>
-      </nav>
-    </header>
-    {children}
-  </div>
-)
+const Layout = ({ children }: Props) => <div>{children}</div>;
 
-export default Layout
+export default Layout;
