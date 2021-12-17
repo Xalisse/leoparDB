@@ -1,36 +1,49 @@
+import { useEffect, useState } from 'react'
 import Layout from '../components/Layout'
-import {createConnection} from "typeorm";
+import axios from 'axios';
 
-const IndexPage = ({ tableNames, dbNames }) => {
+const IndexPage = () => {
+  const [databases, setDatabases] = useState([]);
+  useEffect(() => {
+    async function fetchDatabases() {
+      const response = await axios.post("/api/databases", {
+        type: "mysql",
+        host: "localhost",
+        port: 8889,
+        username: "root",
+        password: "root",
+      }, {
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
+
+      if (response.status !== 200) {
+        throw new Error(`Error: ${response.status}`);
+      }
+      setDatabases(response.data);
+    }
+    
+    fetchDatabases();
+  }, []);
+
   return (
     <Layout title="LeoparDB 🐆">
       <p>
         The easiest way to visualize your databases
       </p>
-      {tableNames.map((table, index) => (
-       <span className='indent' key={index} > {table.table_name} </span>
-      ))}
-      {dbNames.map((db, index) => (
-       <span className='indent' key={index + 'db'} > {db.Database} </span>
-      ))}
+      <div>
+        {databases.map((database) => (
+          <div key={database.name}>
+            {database.name}
+            {database.tables.map((table) => (
+              <p key={database.name + table}>{table}</p>
+            ))}
+          </div>
+        ))}
+      </div>
     </Layout>
   )
 }
-
-// This gets called on every request
-export async function getServerSideProps() {
-    const db = await createConnection({
-      type: "mysql",
-      host: "localhost",
-      port: 8889,
-      username: "root",
-      password: "root",
-      logging: false,
-    });
-    const tableNames = await db.query('SELECT table_name FROM information_schema.tables WHERE table_schema = "M3104"');
-    const dbNames = await db.query('SHOW DATABASES');
-  return { props: { tableNames, dbNames } }
-}
-
 
 export default IndexPage
