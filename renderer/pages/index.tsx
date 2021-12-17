@@ -29,16 +29,13 @@ const IndexPage = () => {
 
   return (
     <Layout title="LeoparDB 🐆">
-      <p>
-        The easiest way to visualize your databases
-      </p>
+      <h1 className="font-bold text-2xl text-center">
+        The easiest way to visualize your databases 🐆
+      </h1>
       <div>
         {databases.map((database) => (
           <div key={database.name}>
             {database.name}
-            {database.tables.map((table) => (
-              <p key={database.name + table}>{table}</p>
-            ))}
           </div>
         ))}
       </div>
