@@ -29,6 +29,7 @@ export default function MyApp({ Component, pageProps }) {
       if (response.status !== 200) {
         throw new Error(`Error: ${response.status}`);
       }
+      console.log(response.data);
       setDatabases(response.data);
     }
 

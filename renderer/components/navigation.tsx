@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Database } from "../interfaces";
 
 type Props = {
@@ -8,7 +9,9 @@ const Navigation = ({ databases }: Props) => {
   return (
     <div>
       {databases.map((database) => (
-        <div key={database.name}>{database.name}</div>
+        <Link href={`/database/${database.name}`} key={database.name}>
+          <div>{database.name}</div>
+        </Link>
       ))}
     </div>
   );

@@ -21,7 +21,7 @@ export default async function handler(
     });
     const databases: { table_name: string; table_schema: string }[] =
       await db.query(
-        "SELECT table_name, table_schema FROM information_schema.tables"
+        "SELECT table_name, table_schema FROM information_schema.tables WHERE table_type='BASE TABLE'"
       );
     let groups = {};
     for (let database of databases) {
@@ -39,7 +39,7 @@ export default async function handler(
     db.close();
     res.status(200).json(result);
   } else {
-    res.setHeader("Allow", ["GET"]);
+    res.setHeader("Allow", ["POST"]);
     res.status(405).end(`Method ${method} Not Allowed`);
   }
 }
