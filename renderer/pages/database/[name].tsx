@@ -15,13 +15,22 @@ const DynamicRow = ({ row }: PropsRow) => {
   for (const prop in row) {
     if (row[prop] instanceof Object) {
       cells.push(
-        <td key={prop + "properror"}>Object too complex to be displayed</td>
+        <td key={prop + "properror"} className="truncate">
+          Object too complex to be displayed
+        </td>
       );
     } else {
-      cells.push(<td key={prop}>{row[prop]}</td>);
+      cells.push(
+        <td
+          className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap truncate"
+          key={prop}
+        >
+          {row[prop]}
+        </td>
+      );
     }
   }
-  return <tr>{cells}</tr>;
+  return <tr className="bg-white border-b">{cells}</tr>;
 };
 
 const DynamicTable = ({ data }: PropsTable) => {
@@ -34,11 +43,19 @@ const DynamicTable = ({ data }: PropsTable) => {
   }
 
   return (
-    <table>
-      <thead>
-        {Object.getOwnPropertyNames(data[0]).map((property) => (
-          <th key={property}>{property}</th>
-        ))}
+    <table className="max-w-full">
+      <thead className="bg-gray-50 ">
+        <tr>
+          {Object.getOwnPropertyNames(data[0]).map((property) => (
+            <th
+              scope="col"
+              className="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase "
+              key={property}
+            >
+              {property}
+            </th>
+          ))}
+        </tr>
       </thead>
       <tbody>{rows}</tbody>
     </table>

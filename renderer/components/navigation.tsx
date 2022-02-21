@@ -7,10 +7,10 @@ type Props = {
 
 const Navigation = ({ databases }: Props) => {
   return (
-    <div>
+    <div className="bg-gray-100 h-screen sticky top-0 p-1 pr-3">
       {databases.map((database) => (
         <Link href={`/database/${database.name}`} key={database.name}>
-          <div>{database.name}</div>
+          <div className="cursor-pointer">{database.name}</div>
         </Link>
       ))}
     </div>
