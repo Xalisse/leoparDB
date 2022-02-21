@@ -25,7 +25,7 @@ export default async function handler(
 
     try {
       const tablesNames = await db.query(
-        "SELECT table_name FROM information_schema.tables WHERE table_type='BASE TABLE' AND table_schema = ?",
+        "SELECT table_name as table_name FROM information_schema.tables WHERE table_type='BASE TABLE' AND table_schema = ?",
         [database]
       );
       const allPromises = [];

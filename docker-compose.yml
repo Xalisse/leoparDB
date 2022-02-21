@@ -1,0 +1,25 @@
+version: "3.1"
+
+services:
+  mysql-db:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: db
+      MYSQL_USER: db
+      MYSQL_PASSWORD: db
+    ports:
+      - 3306:3306
+    volumes:
+      - leopardb-mysql-db:/var/lib/mysq
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8100:8080
+
+volumes:
+  leopardb-mysql-db:

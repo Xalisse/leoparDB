@@ -58,7 +58,7 @@ const Database = () => {
         {
           type: "mysql",
           host: "localhost",
-          port: 8889,
+          port: 3306,
           username: "root",
           password: "root",
         },
@@ -72,7 +72,6 @@ const Database = () => {
       if (status !== 200) {
         throw new Error(`Error: ${status}`);
       }
-      console.log(data);
       setTables(data);
     }
 
