@@ -11,7 +11,10 @@
     "pack-app": "npm run build && electron-builder --dir",
     "dist": "npm run build && electron-builder",
     "type-check": "tsc",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "lint": "eslint renderer",
+    "prettier:fix": "prettier --write",
+    "prettier:check": "prettier --check ."
   },
   "dependencies": {
     "axios": "^0.24.0",
@@ -43,6 +46,15 @@
     "files": [
       "main",
       "renderer/out"
+    ]
+  },
+  "gitHooks": {
+    "pre-commit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,jsx,vue,ts,tsx}": [
+      "npm prettier:fix",
+      "npm lint"
     ]
   }
 }
