@@ -72,6 +72,8 @@ const Navigation = () => {
           )}
         </Disclosure>
       ))}
+
+      <button>Add a server</button>
     </div>
   );
 };
