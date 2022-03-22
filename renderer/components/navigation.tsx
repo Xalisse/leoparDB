@@ -6,39 +6,34 @@ import { Database } from '../interfaces';
 import { ChevronRightIcon } from '@heroicons/react/solid';
 
 import { DatabaseIcon, TableIcon } from '@heroicons/react/outline';
+import IServer from '../models/server-interface';
+import useSWR from 'swr';
+
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const Navigation = ({ addServer }) => {
   const [databases, setDatabases] = useState<Database[]>([]);
-  useEffect(() => {
-    async function fetchDatabases() {
-      const response = await axios.post(
-        '/api/databases',
-        {
-          type: 'mysql',
-          host: 'localhost',
-          port: 3306,
-          username: 'root',
-          password: 'root',
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      );
 
-      if (response.status !== 200) {
-        throw new Error(`Error: ${response.status}`);
-      }
-      console.log(response.data);
-      setDatabases(response.data);
-    }
+  const { data: servers, error: serversError } = useSWR(
+    '/api/servers',
+    fetcher
+  );
+
+  useEffect(() => {
+    const fetchDatabases = () => {
+      // setDatabases(response.data);
+      console.log('fetch db');
+    };
 
     fetchDatabases();
-  }, []);
+  }, [servers]);
 
   return (
     <div className='pr-2shadow-md fixed top-0 h-full w-56 overflow-x-hidden bg-slate-100 p-1'>
+      {servers &&
+        servers.map((server, index) => (
+          <div key={`${server.name}-${index}`}>{server.name}</div>
+        ))}
       {databases.map((database, index) => (
         <Disclosure key={`${database.name}-${index}`}>
           {({ open }) => (
@@ -73,7 +68,12 @@ const Navigation = ({ addServer }) => {
         </Disclosure>
       ))}
 
-      <button onClick={() => addServer()}>Add a server</button>
+      <button
+        onClick={() => addServer()}
+        className='rounded-lg bg-blue-500 px-3 py-2 text-white'
+      >
+        Add a server
+      </button>
     </div>
   );
 };

@@ -1,15 +1,23 @@
 import { Dialog } from '@headlessui/react';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
+import * as Yup from 'yup';
+import IServer from '../models/server-interface';
+import { addServer } from '../services/server-service';
 
-interface Server {
-  database: string;
-  host: string;
-  port: number;
-  username: string;
-  password: string;
-}
+const AddServerSchema = Yup.object().shape({
+  type: Yup.string().required('Required'),
+  name: Yup.string().required('Required'),
+  host: Yup.string().required('Required'),
+  port: Yup.number().required('Required'),
+  username: Yup.string().required('Required'),
+  password: Yup.string().required('Required'),
+});
 
 const AddServerModal = ({ isOpen, setIsOpen }) => {
+  const handleAddServer = (server: IServer) => {
+    addServer(server);
+  };
+
   return (
     <Dialog
       as='div'
@@ -28,55 +36,72 @@ const AddServerModal = ({ isOpen, setIsOpen }) => {
           </Dialog.Title>
           <Formik
             initialValues={{
-              database: 'mysql',
-              host: null,
-              port: null,
-              username: null,
-              password: null,
+              name: '',
+              type: 'mysql',
+              host: '',
+              port: undefined,
+              username: '',
+              password: '',
             }}
+            validationSchema={AddServerSchema}
             onSubmit={(
-              values: Server,
-              { setSubmitting }: FormikHelpers<Server>
+              values: IServer,
+              { setSubmitting }: FormikHelpers<IServer>
             ) => {
-              console.log(values);
+              handleAddServer(values);
             }}
           >
-            <Form>
-              <label>Database type (only MySQL available for now)</label>
-              <Field
-                as='select'
-                name='database'
-                className=' relative block w-full cursor-default rounded-lg border border-gray-300 bg-white p-2.5 py-2 pl-3 pr-10 text-left text-sm text-gray-900 sm:text-sm'
-              >
-                <option value='mysql'>MySQL</option>
-              </Field>
-
-              <label>Host</label>
-              <Field name='host'></Field>
-              <label>Port</label>
-              <Field type='number' name='port'></Field>
-              <label>Username</label>
-              <Field name='username'></Field>
-              <label>Password</label>
-              <Field type='password' name='password'></Field>
-
-              <div className='mt-7 flex justify-between'>
-                <button
-                  onClick={() => {}}
-                  type='submit'
-                  className='rounded-lg bg-red-600 px-3 py-2 text-white'
+            {({ errors, touched }) => (
+              <Form>
+                <label>Database type (only MySQL available for now)</label>
+                <Field
+                  as='select'
+                  name='database'
+                  className=' relative block w-full cursor-default rounded-lg border border-gray-300 bg-white p-2.5 py-2 pl-3 pr-10 text-left text-sm text-gray-900 sm:text-sm'
                 >
-                  Cancel
-                </button>
-                <button
-                  onClick={() => {}}
-                  type='submit'
-                  className='rounded-lg bg-green-600 px-3 py-2 text-white'
-                >
-                  Validate
-                </button>
-              </div>
-            </Form>
+                  <option value='mysql'>MySQL</option>
+                </Field>
+
+                <label>Name</label>
+                <Field name='name'></Field>
+                {errors.name && touched.name ? (
+                  <div className='text-red-500'>{errors.name}</div>
+                ) : null}
+                <label>Host</label>
+                <Field name='host'></Field>
+                {errors.host && touched.host ? (
+                  <div className='text-red-500'>{errors.host}</div>
+                ) : null}
+                <label>Port</label>
+                <Field type='number' name='port'></Field>
+                {errors.port && touched.port ? (
+                  <div className='text-red-500'>{errors.port}</div>
+                ) : null}
+                <label>Username</label>
+                <Field name='username'></Field>
+                {errors.username && touched.username ? (
+                  <div className='text-red-500'>{errors.username}</div>
+                ) : null}
+
+                <div className='mt-7 flex justify-between'>
+                  <button
+                    onClick={() => {
+                      setIsOpen(false);
+                    }}
+                    type='submit'
+                    className='rounded-lg bg-red-600 px-3 py-2 text-white'
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type='submit'
+                    className='rounded-lg bg-green-600 px-3 py-2 text-white'
+                  >
+                    Validate
+                  </button>
+                </div>
+              </Form>
+            )}
           </Formik>
         </div>
       </div>

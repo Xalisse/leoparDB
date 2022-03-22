@@ -1,3 +1,20 @@
 {
-  "servers": ["p1"]
+  "servers": [
+    {
+      "name": "localhost@3306",
+      "type": "mysql",
+      "host": "localhost",
+      "port": 3306,
+      "username": "root",
+      "password": "root"
+    },
+    {
+      "name": "localhost@3309",
+      "type": "mysql",
+      "host": "localhost",
+      "port": 3309,
+      "username": "root",
+      "password": "root"
+    }
+  ]
 }

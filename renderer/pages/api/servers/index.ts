@@ -25,13 +25,13 @@ export default async function handler(
 
   switch (method) {
     case 'POST':
-      // TODO: Add a server
+      db.data.servers.push(body);
+      db.write();
+      res.send();
       break;
 
     case 'GET':
-      // TODO: Get all servers stored
-      console.log(db.data);
-      res.send(db.data);
+      res.send(db.data.servers);
       break;
 
     default:
