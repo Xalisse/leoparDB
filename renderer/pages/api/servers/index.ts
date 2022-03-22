@@ -17,7 +17,6 @@ export default async function handler(
 
   // Use JSON file for storage
   const file = join(__dirname, 'db.json');
-  console.log(file);
   const adapter = new JSONFile<Data>(file);
   const db = new Low(adapter);
   // Read data from JSON file, this will set db.data content

@@ -1,7 +1,6 @@
-import axios from "axios";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { Database } from "../../interfaces";
+import axios from 'axios';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 type PropsRow = {
   row: Array<any>;
 };
@@ -15,14 +14,14 @@ const DynamicRow = ({ row }: PropsRow) => {
   for (const prop in row) {
     if (row[prop] instanceof Object) {
       cells.push(
-        <td key={prop + "properror"} className="truncate">
+        <td key={prop + 'properror'} className='truncate'>
           Object too complex to be displayed
         </td>
       );
     } else {
       cells.push(
         <td
-          className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap truncate"
+          className='truncate whitespace-nowrap py-4 px-6 text-sm font-medium text-gray-900'
           key={prop}
         >
           {row[prop]}
@@ -30,7 +29,7 @@ const DynamicRow = ({ row }: PropsRow) => {
       );
     }
   }
-  return <tr className="bg-white border-b">{cells}</tr>;
+  return <tr className='border-b bg-white'>{cells}</tr>;
 };
 
 const DynamicTable = ({ data }: PropsTable) => {
@@ -39,17 +38,17 @@ const DynamicTable = ({ data }: PropsTable) => {
   }
   const rows = [];
   for (const [index, d] of data.entries()) {
-    rows.push(<DynamicRow key={index + "row"} row={d} />);
+    rows.push(<DynamicRow key={index + 'row'} row={d} />);
   }
 
   return (
-    <table className="max-w-full">
-      <thead className="bg-gray-50 ">
+    <table className='max-w-full'>
+      <thead className='bg-gray-50 '>
         <tr>
           {Object.getOwnPropertyNames(data[0]).map((property) => (
             <th
-              scope="col"
-              className="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase "
+              scope='col'
+              className='py-3 px-6 text-left text-xs font-medium uppercase tracking-wider text-gray-700 '
               key={property}
             >
               {property}
@@ -73,15 +72,15 @@ const Database = () => {
       const { data, status } = await axios.post(
         `/api/databases/${name}`,
         {
-          type: "mysql",
-          host: "localhost",
+          type: 'mysql',
+          host: 'localhost',
           port: 3306,
-          username: "root",
-          password: "root",
+          username: 'root',
+          password: 'root',
         },
         {
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
         }
       );

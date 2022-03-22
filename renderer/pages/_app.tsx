@@ -8,7 +8,6 @@ import '../styles/globals.css';
 export default function MyApp({ Component, pageProps }) {
   const [addServerModalIsOpen, setAddServerModalIsOpen] = useState(false);
   const handleAddServer = () => {
-    console.log('add server clicked');
     setAddServerModalIsOpen(true);
   };
 

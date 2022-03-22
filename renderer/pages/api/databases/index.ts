@@ -1,6 +1,6 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { createConnection } from "typeorm";
-import { Database } from "../../../interfaces";
+import { NextApiRequest, NextApiResponse } from 'next';
+import { Connection, createConnection } from 'typeorm';
+import IDatabase from '../../../interfaces/database-interface';
 
 export default async function handler(
   req: NextApiRequest,
@@ -10,16 +10,23 @@ export default async function handler(
     body: { type, host, port, username, password },
     method,
   } = req;
-  if (method === "POST") {
-    const db = await createConnection({
-      type,
-      host,
-      port,
-      username,
-      password,
-      logging: false,
-      keepAlive: 100,
-    });
+  if (method === 'POST') {
+    let db: Connection;
+    try {
+      db = await createConnection({
+        type,
+        host,
+        port,
+        username,
+        password,
+        logging: false,
+        keepAlive: 100,
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(403).end('Connection refused');
+      return;
+    }
     try {
       const databases: { table_name: string; table_schema: string }[] =
         await db.query(
@@ -33,7 +40,7 @@ export default async function handler(
         }
         groups[groupName].push(database.table_name);
       }
-      const result: Database[] = [];
+      const result: IDatabase[] = [];
       for (let groupName in groups) {
         result.push({ name: groupName, tables: groups[groupName] });
       }
@@ -42,10 +49,10 @@ export default async function handler(
     } catch (err) {
       console.error(err);
       db.close();
-      res.status(500).end("Error while fetching database");
+      res.status(500).end('Error while fetching database');
     }
   } else {
-    res.setHeader("Allow", ["POST"]);
+    res.setHeader('Allow', ['POST']);
     res.status(405).end(`Method ${method} Not Allowed`);
   }
 }

@@ -1,3 +1,5 @@
+import IDatabase from './database-interface';
+
 interface IServer {
   name: string;
   type: string;
@@ -5,6 +7,7 @@ interface IServer {
   port: number;
   username: string;
   password: string;
+  databases: IDatabase[];
 }
 
 export default IServer;

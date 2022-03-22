@@ -1,7 +1,7 @@
 import { Dialog } from '@headlessui/react';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
-import IServer from '../models/server-interface';
+import IServer from '../interfaces/server-interface';
 import { addServer } from '../services/server-service';
 
 const AddServerSchema = Yup.object().shape({
@@ -42,6 +42,7 @@ const AddServerModal = ({ isOpen, setIsOpen }) => {
               port: undefined,
               username: '',
               password: '',
+              databases: null,
             }}
             validationSchema={AddServerSchema}
             onSubmit={(

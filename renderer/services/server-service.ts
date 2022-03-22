@@ -1,5 +1,5 @@
 import axios from 'axios';
-import IServer from '../models/server-interface';
+import IServer from '../interfaces/server-interface';
 
 const addServer = (server: IServer) => {
   const formData = new FormData();
