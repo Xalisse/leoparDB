@@ -7,34 +7,6 @@ import { Database } from "../interfaces";
 import "../styles/globals.css";
 
 export default function MyApp({ Component, pageProps }) {
-  const [databases, setDatabases] = useState<Database[]>([]);
-  useEffect(() => {
-    async function fetchDatabases() {
-      const response = await axios.post(
-        "/api/databases",
-        {
-          type: "mysql",
-          host: "localhost",
-          port: 3306,
-          username: "root",
-          password: "root",
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (response.status !== 200) {
-        throw new Error(`Error: ${response.status}`);
-      }
-      setDatabases(response.data);
-    }
-
-    fetchDatabases();
-  }, []);
-
   return (
     <>
       <Head>
@@ -51,7 +23,7 @@ export default function MyApp({ Component, pageProps }) {
       </h1>
       <div className="flex">
         <div className="">
-          <Navigation {...{ databases }} />
+          <Navigation />
         </div>
         <div className="">
           <Layout>
