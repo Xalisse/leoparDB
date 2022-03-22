@@ -3,3 +3,7 @@
 @tailwind utilities;
 
 @import url('https://fonts.googleapis.com/css2?family=Quicksand&display=swap');
+
+input {
+    @apply border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5
+}

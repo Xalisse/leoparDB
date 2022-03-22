@@ -7,7 +7,7 @@ import { ChevronRightIcon } from '@heroicons/react/solid';
 
 import { DatabaseIcon, TableIcon } from '@heroicons/react/outline';
 
-const Navigation = () => {
+const Navigation = ({ addServer }) => {
   const [databases, setDatabases] = useState<Database[]>([]);
   useEffect(() => {
     async function fetchDatabases() {
@@ -73,7 +73,7 @@ const Navigation = () => {
         </Disclosure>
       ))}
 
-      <button>Add a server</button>
+      <button onClick={() => addServer()}>Add a server</button>
     </div>
   );
 };
