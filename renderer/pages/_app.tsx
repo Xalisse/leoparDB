@@ -37,7 +37,9 @@ export default function MyApp({ Component, pageProps }) {
                 setAddServerModalIsOpen(false);
               }}
             />
-            <Component {...pageProps} />
+            <main className='ml-56'>
+              <Component {...pageProps} />
+            </main>
           </Layout>
         </div>
       </div>
