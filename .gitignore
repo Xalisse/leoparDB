@@ -36,3 +36,5 @@ yarn-error.log*
 
 # vscode
 /.vscode
+
+renderer/pages/api/servers/db.json

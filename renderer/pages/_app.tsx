@@ -22,14 +22,11 @@ export default function MyApp({ Component, pageProps }) {
         ></meta>
         <meta name='viewport' content='initial-scale=1.0, width=device-width' />
       </Head>
-      <h1 className='text-center text-2xl font-bold'>
-        The easiest way to visualize your databases 🐆
-      </h1>
       <div className='flex'>
         <div className=''>
           <Navigation addServer={handleAddServer} />
         </div>
-        <div className=''>
+        <div className='ml-[250px] w-[100%]'>
           <Layout>
             <AddServerModal
               isOpen={addServerModalIsOpen}
@@ -37,7 +34,7 @@ export default function MyApp({ Component, pageProps }) {
                 setAddServerModalIsOpen(false);
               }}
             />
-            <main className='ml-56'>
+            <main>
               <Component {...pageProps} />
             </main>
           </Layout>
