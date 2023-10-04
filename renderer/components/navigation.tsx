@@ -38,7 +38,7 @@ const Navigation = () => {
   }, []);
 
   return (
-    <div className='pr-2shadow-md fixed top-0 h-full w-56 overflow-x-hidden bg-slate-100 p-1'>
+    <div className='h-full bg-slate-100 pr-2 shadow-md'>
       {databases.map((database, index) => (
         <Disclosure key={`${database.name}-${index}`}>
           {({ open }) => (
@@ -56,7 +56,7 @@ const Navigation = () => {
                 {database.tables.map((table) => (
                   <Link
                     key={table}
-                    href={`/database/${database.name}/${table}`}
+                    href={`/database/${database.name}`}
                     passHref
                   >
                     <div className='ml-8 flex cursor-pointer items-center gap-1 rounded duration-200 hover:bg-slate-200'>
