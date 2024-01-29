@@ -6,9 +6,12 @@ import { Database } from '../interfaces';
 import { ChevronRightIcon } from '@heroicons/react/solid';
 
 import { DatabaseIcon, TableIcon } from '@heroicons/react/outline';
+import { useRouter } from 'next/router';
 
 const Navigation = () => {
   const [databases, setDatabases] = useState<Database[]>([]);
+  const router = useRouter();
+
   useEffect(() => {
     async function fetchDatabases() {
       const response = await axios.post(
@@ -30,7 +33,6 @@ const Navigation = () => {
       if (response.status !== 200) {
         throw new Error(`Error: ${response.status}`);
       }
-      console.log(response.data);
       setDatabases(response.data);
     }
 
@@ -39,6 +41,7 @@ const Navigation = () => {
 
   return (
     <div className='h-full bg-slate-100 pr-2 shadow-md'>
+      {router.asPath}
       {databases.map((database, index) => (
         <Disclosure key={`${database.name}-${index}`}>
           {({ open }) => (
@@ -56,7 +59,7 @@ const Navigation = () => {
                 {database.tables.map((table) => (
                   <Link
                     key={table}
-                    href={`/database/${database.name}`}
+                    href={`/database/${database.name}/${table}`}
                     passHref
                   >
                     <div className='ml-8 flex cursor-pointer items-center gap-1 rounded duration-200 hover:bg-slate-200'>
