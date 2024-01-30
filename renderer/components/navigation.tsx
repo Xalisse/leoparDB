@@ -10,6 +10,8 @@ import { useRouter } from 'next/router';
 
 const Navigation = () => {
   const [databases, setDatabases] = useState<Database[]>([]);
+  const [selectedTable, setSelectedTable] =
+    useState<{ database: string; table: string }>();
   const router = useRouter();
 
   useEffect(() => {
@@ -39,11 +41,22 @@ const Navigation = () => {
     fetchDatabases();
   }, []);
 
+  useEffect(() => {
+    if (router.query.slug && router.query.slug.length === 2) {
+      setSelectedTable({
+        database: router.query.slug[0] as string,
+        table: router.query.slug[1] as string,
+      });
+    }
+  }, [router.query.slug]);
+
   return (
-    <div className='h-full bg-slate-100 pr-2 shadow-md'>
-      {router.asPath}
+    <div className='h-screen max-h-screen overflow-scroll bg-slate-100 pr-2 shadow-md'>
       {databases.map((database, index) => (
-        <Disclosure key={`${database.name}-${index}`}>
+        <Disclosure
+          key={`${database.name}-${index}`}
+          defaultOpen={selectedTable?.database === database.name}
+        >
           {({ open }) => (
             <>
               <Disclosure.Button className='flex w-full cursor-pointer items-center gap-1 truncate rounded duration-200 hover:bg-slate-200'>
@@ -62,7 +75,14 @@ const Navigation = () => {
                     href={`/database/${database.name}/${table}`}
                     passHref
                   >
-                    <div className='ml-8 flex cursor-pointer items-center gap-1 rounded duration-200 hover:bg-slate-200'>
+                    <div
+                      className={`ml-8 flex cursor-pointer items-center gap-1 rounded duration-200 hover:bg-slate-200 ${
+                        selectedTable?.database === database.name &&
+                        selectedTable?.table === table
+                          ? 'font-black'
+                          : ''
+                      }`}
+                    >
                       <TableIcon className='h-4 w-4 text-gray-600' />
                       <span className='flex-1 truncate' title={table}>
                         {table}
