@@ -1,45 +1,16 @@
 import { Disclosure } from '@headlessui/react'
-import axios from 'axios'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import { Database } from '../interfaces'
 import { ChevronRightIcon } from '@heroicons/react/solid'
-
 import { DatabaseIcon, TableIcon } from '@heroicons/react/outline'
 import { useRouter } from 'next/router'
+import useAllDatabases from '../hooks/useAllDatabases'
 
 const Navigation = () => {
-    const [databases, setDatabases] = useState<Database[]>([])
+    const databases = useAllDatabases()
     const [selectedTable, setSelectedTable] =
         useState<{ database: string; table: string }>()
     const router = useRouter()
-
-    useEffect(() => {
-        async function fetchDatabases() {
-            const response = await axios.post(
-                '/api/databases',
-                {
-                    type: 'mysql',
-                    host: 'localhost',
-                    port: 3306,
-                    username: 'root',
-                    password: 'root',
-                },
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                }
-            )
-
-            if (response.status !== 200) {
-                throw new Error(`Error: ${response.status}`)
-            }
-            setDatabases(response.data)
-        }
-
-        fetchDatabases()
-    }, [])
 
     useEffect(() => {
         if (router.query.slug && router.query.slug.length === 2) {
@@ -52,7 +23,7 @@ const Navigation = () => {
 
     return (
         <div className='h-screen max-h-screen overflow-scroll bg-slate-100 pr-2 shadow-md'>
-            {databases.map((database, index) => (
+            {databases?.map((database, index) => (
                 <Disclosure
                     key={`${database.name}-${index}`}
                     defaultOpen={selectedTable?.database === database.name}

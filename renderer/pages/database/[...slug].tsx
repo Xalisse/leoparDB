@@ -1,8 +1,8 @@
-import axios from 'axios'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { Database } from '../../interfaces'
 import { DatabaseIcon, TableIcon } from '@heroicons/react/outline'
+import useTableData from '../../hooks/useTableData'
 type PropsRow = {
     row: Array<any>
 }
@@ -67,7 +67,7 @@ const Database = () => {
     const router = useRouter()
     const [databaseName, setDatabaseName] = useState<string>()
     const [tableName, setTableName] = useState<string>()
-    const [tableData, setTableData] = useState<any[]>([])
+    const tableData = useTableData(databaseName, tableName)
 
     useEffect(() => {
         if (!router.isReady) return
@@ -75,36 +75,6 @@ const Database = () => {
         setDatabaseName(router.query.slug[0])
         setTableName(router.query.slug[1])
     }, [router.isReady, router.asPath])
-
-    useEffect(() => {
-        if (!databaseName || !tableName) return
-
-        async function getData() {
-            const { data, status } = await axios.post(
-                `/api/databases/${databaseName}/${tableName}`,
-                {
-                    type: 'mysql',
-                    host: 'localhost',
-                    port: 3306,
-                    username: 'root',
-                    password: 'root',
-                },
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                }
-            )
-
-            if (status !== 200) {
-                throw new Error('Erreur lors du fetch des data')
-            }
-
-            setTableData(data)
-        }
-
-        getData()
-    }, [databaseName, tableName])
 
     return (
         <div>
