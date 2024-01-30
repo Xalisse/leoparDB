@@ -3,18 +3,18 @@
 // example, to import the interface below do:
 //
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { IpcRenderer } from "electron";
+import { IpcRenderer } from 'electron'
 
 declare global {
-  // eslint-disable-next-line @typescript-eslint/no-namespace
-  namespace NodeJS {
-    interface Global {
-      ipcRenderer: IpcRenderer;
+    // eslint-disable-next-line @typescript-eslint/no-namespace
+    namespace NodeJS {
+        interface Global {
+            ipcRenderer: IpcRenderer
+        }
     }
-  }
 }
 
 export type Database = {
-  name: string;
-  tables: string[];
-};
+    name: string
+    tables: string[]
+}

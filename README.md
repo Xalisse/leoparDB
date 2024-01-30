@@ -4,9 +4,9 @@ Or how to visualize easily and quickly your databases
 
 ## Starting guide development
 
-- Launch a mysql database with docker-compose
-- Start the app by running `npm run dev`
-- Access the app through the windows or in a browser on the url `localhost:8000`
+-   Launch a mysql database with docker-compose
+-   Start the app by running `npm run dev`
+-   Access the app through the windows or in a browser on the url `localhost:8000`
 
 ## Available commands:
 

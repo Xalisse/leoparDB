@@ -4,22 +4,22 @@
 
 body,
 html {
-  height: 100vh;
-  max-height: 100vh;
-  overflow: scroll;
-  font-family: Georgia, 'Times New Roman', Times, serif;
+    height: 100vh;
+    max-height: 100vh;
+    overflow: scroll;
+    font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
 #__next {
-  height: 100%;
+    height: 100%;
 }
 
 h1 {
-  font-size: larger;
-  font-weight: bold;
+    font-size: larger;
+    font-weight: bold;
 }
 
 h2 {
-  font-size: large;
-  font-weight: bold;
+    font-size: large;
+    font-weight: bold;
 }
