@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
-import { Database } from '../interfaces'
+import { DatabaseType } from '../interfaces'
 import axios from 'axios'
 
 const useAllDatabases = () => {
-    const [databases, setDatabases] = useState<Database[]>([])
+    const [databases, setDatabases] = useState<DatabaseType[]>([])
 
     useEffect(() => {
         async function fetchDatabases() {

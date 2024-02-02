@@ -1,20 +1,12 @@
 import { JSONFilePreset } from 'lowdb/node'
+import { ServerConnectionsInfosType } from '../../../interfaces/servers'
 
-type DatabaseConnectionsInfosType = {
-    databases: {
-        name: string
-        type: 'mysql'
-        host: string
-        port: number
-        username: string
-        password: string
-    }[]
-}
-
-const getServersInfos = async (): Promise<DatabaseConnectionsInfosType> => {
-    const defaultData: DatabaseConnectionsInfosType = { databases: [] }
-    const db = await JSONFilePreset('lowdbStorage/settings.json', defaultData)
-    return db.data
+const getServersInfos = async (): Promise<ServerConnectionsInfosType[]> => {
+    const defaultData: { servers: ServerConnectionsInfosType[] } = {
+        servers: [],
+    }
+    const db = await JSONFilePreset('lowdbStorage/servers.json', defaultData)
+    return db.data.servers
 }
 
 export default async function handler(req, res) {
