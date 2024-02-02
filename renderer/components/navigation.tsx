@@ -1,10 +1,9 @@
 import { Disclosure } from '@headlessui/react'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import { ChevronRightIcon } from '@heroicons/react/solid'
-import { DatabaseIcon, TableIcon } from '@heroicons/react/outline'
+import { ChevronRightIcon, CircleStackIcon, TableCellsIcon } from '@heroicons/react/24/solid'
 import { useRouter } from 'next/router'
-import useAllDatabases from '../hooks/useAllDatabases'
+import useAllDatabases from '../lib/hooks/useAllDatabases'
 
 const Navigation = () => {
     const databases = useAllDatabases()
@@ -36,7 +35,7 @@ const Navigation = () => {
                                         open && 'rotate-90 transform'
                                     }`}
                                 />
-                                <DatabaseIcon className='h-4 w-4 text-gray-600' />
+                                <CircleStackIcon className='h-4 w-4 text-gray-600' />
                                 <div className='cursor-pointer'>
                                     {database.name}
                                 </div>
@@ -57,7 +56,7 @@ const Navigation = () => {
                                                     : ''
                                             }`}
                                         >
-                                            <TableIcon className='h-4 w-4 text-gray-600' />
+                                            <TableCellsIcon className='h-4 w-4 text-gray-600' />
                                             <span
                                                 className='flex-1 truncate'
                                                 title={table}

@@ -14,7 +14,7 @@ declare global {
     }
 }
 
-export type Database = {
+export type DatabaseType = {
     name: string
     tables: string[]
 }

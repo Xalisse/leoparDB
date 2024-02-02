@@ -1,8 +1,7 @@
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { Database } from '../../interfaces'
-import { DatabaseIcon, TableIcon } from '@heroicons/react/outline'
-import useTableData from '../../hooks/useTableData'
+import useTableData from '../../lib/hooks/useTableData'
+import { CircleStackIcon, TableCellsIcon } from '@heroicons/react/24/solid'
 type PropsRow = {
     row: Array<any>
 }
@@ -39,9 +38,9 @@ const DynamicTable = ({ data }: PropsTable) => {
         return <div></div>
     }
     const rows = []
-    for (const [index, d] of data.entries()) {
+    data.forEach((d, index) => {
         rows.push(<DynamicRow key={index + 'row'} row={d} />)
-    }
+    })
 
     return (
         <table className='max-w-full'>
@@ -79,11 +78,11 @@ const Database = () => {
     return (
         <div>
             <h1 className='flex items-center'>
-                <DatabaseIcon className='h-4 w-4 text-gray-600' />
+                <CircleStackIcon className='h-4 w-4 text-gray-600' />
                 {databaseName}
             </h1>
             <h2 className='flex items-center'>
-                <TableIcon className='h-4 w-4 text-gray-600' />
+                <TableCellsIcon className='h-4 w-4 text-gray-600' />
                 {tableName}
             </h2>
 
