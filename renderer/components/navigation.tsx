@@ -1,15 +1,32 @@
 import { Disclosure } from '@headlessui/react'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
-import { ChevronRightIcon, CircleStackIcon, TableCellsIcon } from '@heroicons/react/24/solid'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { ChevronRightIcon, CircleStackIcon, PlusIcon, TableCellsIcon } from '@heroicons/react/24/solid'
 import { useRouter } from 'next/router'
 import useAllServers from '../lib/hooks/useAllServers'
+import Modal from './common/modal'
+import { addServer } from '../lib/api/api'
 
 const Navigation = () => {
     const servers = useAllServers()
     const [selectedTable, setSelectedTable] =
         useState<{ database: string; table: string }>()
+    const [isOpenModal, setIsOpenModal] = useState(false)
     const router = useRouter()
+
+    const createServer = useCallback(async (values: {
+        name: string,
+        type: string,
+        host: string,
+        port: string,
+        username: string,
+        password: string,
+    }) => {
+        const res = await addServer(values)
+        if (res.status === 201) {
+            setIsOpenModal(false)
+        }
+    }, [])
 
     useEffect(() => {
         if (router.query.slug && router.query.slug.length === 2) {
@@ -21,7 +38,7 @@ const Navigation = () => {
     }, [router.query.slug])
 
     return (
-        <div className='h-screen max-h-screen overflow-scroll bg-slate-100 pr-2 shadow-md'>
+        <div className='h-screen max-h-screen overflow-scroll flex flex-col bg-slate-100 pr-2 shadow-md'>
             {servers?.map((server) => (<div key={server.name}>
                 <h1>{server.name}</h1>
 
@@ -75,6 +92,10 @@ const Navigation = () => {
                     </Disclosure>
                 ))}
             </div>))}
+
+            <button className='flex border items-center' onClick={() => setIsOpenModal(true)}>Add server<PlusIcon width={20} /></button>
+
+            <Modal isOpen={isOpenModal} onClose={() => setIsOpenModal(false)} onSubmit={createServer} />
         </div>
     )
 }

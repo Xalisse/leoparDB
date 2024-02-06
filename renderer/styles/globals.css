@@ -23,3 +23,20 @@ h2 {
     font-size: large;
     font-weight: bold;
 }
+
+.my-shadow {
+    box-shadow: 1px 0px 11px 0px rgba(0, 0, 0, 0.15);
+}
+
+button {
+    @apply cursor-pointer;
+}
+
+input,
+select {
+    @apply border border-gray-300 rounded-md;
+}
+
+label {
+    @apply font-bold mt-4;
+}

@@ -16,6 +16,7 @@
         "axios": "^1.6.7",
         "electron-serve": "^1.1.0",
         "electron-store": "^8.1.0",
+        "formik": "^2.4.5",
         "lowdb": "^7.0.1",
         "mysql": "^2.18.1",
         "typeorm": "^0.3.20"
