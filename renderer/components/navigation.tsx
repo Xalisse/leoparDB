@@ -9,7 +9,7 @@ import { addServer } from '../lib/api/api'
 import toast, { Toaster } from 'react-hot-toast'
 
 const Navigation = () => {
-    const servers = useAllServers()
+    const {databases: servers, mutateData} = useAllServers()
     const [selectedTable, setSelectedTable] =
         useState<{ database: string; table: string }>()
     const [isOpenModal, setIsOpenModal] = useState(false)
@@ -26,7 +26,8 @@ const Navigation = () => {
         const res = await addServer(values)
         if (res.status === 201) {
             setIsOpenModal(false)
-            toast.success('Server added successfully', {position: 'bottom-left'})
+            toast.success('Server added successfully', { position: 'bottom-left' })
+            mutateData()
         }
     }, [])
 

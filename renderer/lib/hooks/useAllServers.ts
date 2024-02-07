@@ -15,18 +15,23 @@ const useAllServers = () => {
         ServerConnectionsInfosType[]
     >([])
 
-    useEffect(() => {
-        async function fetchServers() {
-            const response = await axios.get<ServerConnectionsInfosType[]>(
-                '/api/lowdb'
-            )
+    const fetchServers = async () => {
+        const response = await axios.get<ServerConnectionsInfosType[]>(
+            '/api/lowdb'
+        )
 
-            if (response.status !== 200) {
-                throw new Error(`Error: ${response.status}`)
-            }
-
-            setServersConnections(response.data)
+        if (response.status !== 200) {
+            throw new Error(`Error: ${response.status}`)
         }
+
+        setServersConnections(response.data)
+    }
+
+    const mutateData = () => {
+        fetchServers()
+    }
+
+    useEffect(() => {
         fetchServers()
     }, [])
 
@@ -66,7 +71,7 @@ const useAllServers = () => {
         })
     }, [serversConnections])
 
-    return databases
+    return { databases, mutateData }
 }
 
 export default useAllServers
