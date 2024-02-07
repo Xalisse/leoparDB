@@ -6,6 +6,7 @@ import { useRouter } from 'next/router'
 import useAllServers from '../lib/hooks/useAllServers'
 import Modal from './common/modal'
 import { addServer } from '../lib/api/api'
+import toast, { Toaster } from 'react-hot-toast'
 
 const Navigation = () => {
     const servers = useAllServers()
@@ -25,6 +26,7 @@ const Navigation = () => {
         const res = await addServer(values)
         if (res.status === 201) {
             setIsOpenModal(false)
+            toast.success('Server added successfully', {position: 'bottom-left'})
         }
     }, [])
 
@@ -100,6 +102,8 @@ const Navigation = () => {
             <button className='flex border items-center' onClick={() => setIsOpenModal(true)}>Add server<PlusIcon width={20} /></button>
 
             <Modal isOpen={isOpenModal} onClose={() => setIsOpenModal(false)} onSubmit={createServer} />
+
+            <Toaster />
         </div>
     )
 }
