@@ -10,18 +10,20 @@ html {
     font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
+* {
+    @apply box-border;
+}
+
 #__next {
     height: 100%;
 }
 
 h1 {
-    font-size: larger;
-    font-weight: bold;
+    @apply text-xl font-bold;
 }
 
 h2 {
-    font-size: large;
-    font-weight: bold;
+    @apply text-lg font-bold;
 }
 
 .my-shadow {

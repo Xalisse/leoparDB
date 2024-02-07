@@ -27,4 +27,9 @@ const addServer = async ({
     return { status: res.status, data: res.data }
 }
 
-export { addServer }
+const removeServer = async (name: string): Promise<{ status: number }> => {
+    const res = await axios.delete(`/api/lowdb/${name}`)
+    return { status: res.status }
+}
+
+export { addServer, removeServer }

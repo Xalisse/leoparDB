@@ -31,7 +31,7 @@ export default async function handler(req, res) {
         await createServer({ name, type, host, port, username, password })
         res.status(201).json({ status: 'success' })
     } else {
-        res.setHeader('Allow', ['GET'])
+        res.setHeader('Allow', ['GET', 'POST'])
         res.status(405).end(`Method ${method} Not Allowed`)
     }
 }

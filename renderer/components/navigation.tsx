@@ -1,12 +1,13 @@
 import { Disclosure } from '@headlessui/react'
 import Link from 'next/link'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { ChevronRightIcon, CircleStackIcon, PlusIcon, TableCellsIcon } from '@heroicons/react/24/solid'
+import { ChevronRightIcon, CircleStackIcon, PlusIcon, TableCellsIcon, XMarkIcon } from '@heroicons/react/24/solid'
 import { useRouter } from 'next/router'
 import useAllServers from '../lib/hooks/useAllServers'
 import Modal from './common/modal'
 import { addServer } from '../lib/api/api'
 import toast, { Toaster } from 'react-hot-toast'
+import { Formik, Form, Field } from 'formik'
 
 const Navigation = () => {
     const {databases: servers, mutateData} = useAllServers()
@@ -43,7 +44,7 @@ const Navigation = () => {
     return (
         <div className='h-screen max-h-screen overflow-scroll flex flex-col gap-4 bg-slate-100 px-2 shadow-md'>
             {servers?.map((server) => (<div key={server.name}>
-                <h1>{server.name}</h1>
+                <Link href={`/server/${server.name}`}><p className='text-lg font-bold cursor-pointer'>{server.name}</p></Link>
 
                 {'error' in server && (
                     <div className='text-red-400'>{server.error}</div>
@@ -102,7 +103,49 @@ const Navigation = () => {
 
             <button className='flex border items-center' onClick={() => setIsOpenModal(true)}>Add server<PlusIcon width={20} /></button>
 
-            <Modal isOpen={isOpenModal} onClose={() => setIsOpenModal(false)} onSubmit={createServer} />
+            <Modal isOpen={isOpenModal}>
+                <div className='flex items-center justify-between'>
+                    <h1>Add a server</h1>
+                    <button><XMarkIcon height={20} onClick={() => setIsOpenModal(false)} /></button>
+                </div>
+
+                <Formik
+                    initialValues={{
+                        name: '',
+                        type: 'MySQL',
+                        host: '',
+                        port: '',
+                        username: '',
+                        password: '',
+                    }}
+                    onSubmit={createServer}
+                >
+                    <Form className='flex flex-col'>
+                        <label htmlFor='name'>Name</label>
+                        <Field id='name' name='name' type='text' />
+
+                        <label htmlFor='type'>Type</label>
+                        <Field id='type' name='type' as='select'>
+                            <option value='mysql'>MySQL</option>
+                            <option value='postgres' disabled>PostgreSQL</option>
+                        </Field>
+
+                        <label htmlFor='host'>Host</label>
+                        <Field id='host' name='host' type='text' />
+
+                        <label htmlFor='port'>Port</label>
+                        <Field id='port' name='port' type='number' />
+
+                        <label htmlFor='username'>Username</label>
+                        <Field id='username' name='username' type='text' />
+
+                        <label htmlFor='password'>Password</label>
+                        <Field id='password' name='password' type='password' autoComplete="current-password" />
+
+                        <button type='submit' className='mt-10 border rounded-md'>Confirm</button>
+                    </Form>
+                </Formik>
+            </Modal>
 
             <Toaster />
         </div>
