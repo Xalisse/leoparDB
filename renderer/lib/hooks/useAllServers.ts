@@ -36,6 +36,9 @@ const useAllServers = () => {
     }, [])
 
     useEffect(() => {
+        const newDb = [...databases]
+
+        const fetchPromises = []
         serversConnections.forEach((server) => {
             if (databases.find((db) => db.name === server.name)) {
                 return
@@ -48,26 +51,28 @@ const useAllServers = () => {
                         server
                     )
 
-                    setDatabases((prev) => [
-                        ...prev,
-                        {
-                            ...server,
-                            databases: response.data,
-                        },
-                    ])
+                    newDb.push({
+                        ...server,
+                        databases: response.data,
+                    })
                 } catch (error) {
                     console.error(`Error: ${error}`)
-                    setDatabases((prev) => [
-                        ...prev,
-                        {
-                            ...server,
-                            databases: null,
-                            error: `Error: ${error}`,
-                        },
-                    ])
+                    newDb.push({
+                        ...server,
+                        databases: null,
+                        error: `Error: ${error}`,
+                    })
                 }
             }
-            fetchDatabases()
+            fetchPromises.push(fetchDatabases())
+        })
+
+        Promise.all(fetchPromises).then(() => {
+            // order databases by name
+            newDb.sort((a, b) => {
+                return a.name.localeCompare(b.name)
+            })
+            setDatabases(newDb)
         })
     }, [serversConnections])
 
