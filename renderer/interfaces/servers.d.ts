@@ -11,4 +11,13 @@ type ServerWithDatabasesType = ServerConnectionsInfosType & {
     databases: DatabaseType[]
 }
 
-export { ServerConnectionsInfosType, ServerWithDatabasesType }
+type UnreachableDatabaseType = ServerConnectionsInfosType & {
+    databases: null
+    error: string
+}
+
+export {
+    ServerConnectionsInfosType,
+    ServerWithDatabasesType,
+    UnreachableDatabaseType,
+}

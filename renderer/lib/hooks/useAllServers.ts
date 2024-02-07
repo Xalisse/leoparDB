@@ -3,11 +3,14 @@ import axios from 'axios'
 import {
     ServerConnectionsInfosType,
     ServerWithDatabasesType,
+    UnreachableDatabaseType,
 } from '../../interfaces/servers'
 import { DatabaseType } from 'typeorm'
 
 const useAllServers = () => {
-    const [databases, setDatabases] = useState<ServerWithDatabasesType[]>([])
+    const [databases, setDatabases] = useState<
+        (ServerWithDatabasesType | UnreachableDatabaseType)[]
+    >([])
     const [serversConnections, setServersConnections] = useState<
         ServerConnectionsInfosType[]
     >([])
@@ -34,22 +37,30 @@ const useAllServers = () => {
             }
 
             async function fetchDatabases() {
-                const response = await axios.post<DatabaseType[]>(
-                    '/api/databases',
-                    server
-                )
+                try {
+                    const response = await axios.post<DatabaseType[]>(
+                        '/api/databases',
+                        server
+                    )
 
-                if (response.status !== 200) {
-                    throw new Error(`Error: ${response.status}`)
+                    setDatabases((prev) => [
+                        ...prev,
+                        {
+                            ...server,
+                            databases: response.data,
+                        },
+                    ])
+                } catch (error) {
+                    console.error(`Error: ${error}`)
+                    setDatabases((prev) => [
+                        ...prev,
+                        {
+                            ...server,
+                            databases: null,
+                            error: `Error: ${error}`,
+                        },
+                    ])
                 }
-
-                setDatabases((prev) => [
-                    ...prev,
-                    {
-                        ...server,
-                        databases: response.data,
-                    },
-                ])
             }
             fetchDatabases()
         })

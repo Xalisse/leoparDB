@@ -38,11 +38,15 @@ const Navigation = () => {
     }, [router.query.slug])
 
     return (
-        <div className='h-screen max-h-screen overflow-scroll flex flex-col bg-slate-100 pr-2 shadow-md'>
+        <div className='h-screen max-h-screen overflow-scroll flex flex-col gap-4 bg-slate-100 px-2 shadow-md'>
             {servers?.map((server) => (<div key={server.name}>
                 <h1>{server.name}</h1>
 
-                {server.databases.map((database, index) => (
+                {'error' in server && (
+                    <div className='text-red-400'>{server.error}</div>
+                )}
+
+                {!('error' in server) && server.databases.map((database) => (
                     <Disclosure
                         key={database.name}
                         defaultOpen={selectedTable?.database === database.name}
