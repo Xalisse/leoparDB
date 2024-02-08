@@ -1,18 +1,26 @@
 import { useRouter } from "next/router"
 import Modal from "../../components/common/modal"
-import { useState } from "react"
+import { useContext, useState } from "react"
 import { removeServer } from "../../lib/api/api"
 import toast, { Toaster } from "react-hot-toast"
+import { ServersContext } from "../../contexts/servers"
 
 const Server = () => {
+    const {mutateData} = useContext(ServersContext)
     const router = useRouter()
     const { name } = router.query as { name: string }
     const [isOpenModalRemove, setIsOpenModalRemove] = useState(false)
 
     const removeServerFromList = () => {
-        removeServer(name)
-        toast.success('Server removed successfully', { position: 'bottom-left' })
-        router.push('/')
+        removeServer(name).then(() => {
+            toast.success('Server removed successfully', { position: 'bottom-left' })
+            mutateData()
+            setIsOpenModalRemove(false)
+            router.push('/')
+        }).catch((err) => {
+            toast.error('Error removing server', { position: 'bottom-left' })
+            console.error(err)
+        })
     }
 
     return (

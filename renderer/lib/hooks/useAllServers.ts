@@ -16,9 +16,8 @@ const useAllServers = () => {
     >([])
 
     const fetchServers = async () => {
-        const response = await axios.get<ServerConnectionsInfosType[]>(
-            '/api/lowdb'
-        )
+        const response =
+            await axios.get<ServerConnectionsInfosType[]>('/api/lowdb')
 
         if (response.status !== 200) {
             throw new Error(`Error: ${response.status}`)
@@ -36,11 +35,13 @@ const useAllServers = () => {
     }, [])
 
     useEffect(() => {
-        const newDb = [...databases]
+        const newDb = databases.filter((db) =>
+            serversConnections.find((server) => db.name === server.name)
+        )
 
         const fetchPromises = []
         serversConnections.forEach((server) => {
-            if (databases.find((db) => db.name === server.name)) {
+            if (newDb.find((db) => db.name === server.name)) {
                 return
             }
 

@@ -1,16 +1,16 @@
 import { Disclosure } from '@headlessui/react'
 import Link from 'next/link'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useContext, useEffect, useState } from 'react'
 import { ChevronRightIcon, CircleStackIcon, PlusIcon, TableCellsIcon, XMarkIcon } from '@heroicons/react/24/solid'
 import { useRouter } from 'next/router'
-import useAllServers from '../lib/hooks/useAllServers'
 import Modal from './common/modal'
 import { addServer } from '../lib/api/api'
 import toast, { Toaster } from 'react-hot-toast'
 import { Formik, Form, Field } from 'formik'
+import { ServersContext } from '../contexts/servers'
 
 const Navigation = () => {
-    const {databases: servers, mutateData} = useAllServers()
+    const { servers, mutateData } = useContext(ServersContext)
     const [selectedTable, setSelectedTable] =
         useState<{ database: string; table: string }>()
     const [isOpenModal, setIsOpenModal] = useState(false)

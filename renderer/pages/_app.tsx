@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import Navigation from '../components/navigation'
 import '../styles/globals.css'
+import { ServersProvider } from '../contexts/servers'
 
 export default function MyApp({ Component, pageProps }) {
     return (
@@ -18,12 +19,14 @@ export default function MyApp({ Component, pageProps }) {
                 />
             </Head>
 
-            <div className='grid h-screen grid-cols-[230px_1fr]'>
-                <Navigation />
-                <div className='m-4 overflow-scroll'>
-                    <Component {...pageProps} />
+            <ServersProvider>
+                <div className='grid h-screen grid-cols-[230px_1fr]'>
+                    <Navigation />
+                    <div className='m-4 overflow-scroll'>
+                        <Component {...pageProps} />
+                    </div>
                 </div>
-            </div>
+            </ServersProvider>
         </>
     )
 }
