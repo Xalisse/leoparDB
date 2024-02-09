@@ -32,6 +32,9 @@ h2 {
 
 button {
     @apply cursor-pointer;
+    &:disabled {
+        @apply cursor-not-allowed text-gray-500;
+    }
 }
 
 input,

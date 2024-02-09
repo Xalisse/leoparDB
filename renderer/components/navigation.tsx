@@ -26,6 +26,13 @@ const Navigation = () => {
         }
     }, [])
 
+    const isNameUnique = useCallback((name: string) => {
+        return !servers?.find((server) => server.name === name)
+    }, [servers])
+    const isNameValid = useCallback((name: string) => {
+        return isNameUnique(name) ? null : 'Name already exists'
+    }, [])
+
     useEffect(() => {
         if (router.query.slug && router.query.slug.length === 2) {
             setSelectedTable({
@@ -108,36 +115,41 @@ const Navigation = () => {
                         name: '',
                         type: 'mysql',
                         host: '',
-                        port: null,
+                        port: 0,
                         username: '',
                         password: '',
                     }}
                     onSubmit={createServer}
                 >
-                    <Form className='flex flex-col'>
-                        <label htmlFor='name'>Name</label>
-                        <Field id='name' name='name' type='text' />
+                    {({ errors, touched }) => (
+                        <Form className='flex flex-col'>
+                            <label htmlFor='name'>Name</label>
+                            <Field id='name' name='name' type='text' validate={isNameValid} />
+                            {errors.name && touched.name && (
+                                <div className='text-red-400'>{errors.name}</div>
+                            )}
 
-                        <label htmlFor='type'>Type</label>
-                        <Field id='type' name='type' as='select'>
-                            <option value='mysql'>MySQL</option>
-                            <option value='postgres' disabled>PostgreSQL</option>
-                        </Field>
+                            <label htmlFor='type'>Type</label>
+                            <Field id='type' name='type' as='select'>
+                                <option value='mysql'>MySQL</option>
+                                <option value='postgres' disabled>PostgreSQL</option>
+                            </Field>
 
-                        <label htmlFor='host'>Host</label>
-                        <Field id='host' name='host' type='text' />
+                            <label htmlFor='host'>Host</label>
+                            <Field id='host' name='host' type='text' />
 
-                        <label htmlFor='port'>Port</label>
-                        <Field id='port' name='port' type='number' />
+                            <label htmlFor='port'>Port</label>
+                            <Field id='port' name='port' type='number' />
 
-                        <label htmlFor='username'>Username</label>
-                        <Field id='username' name='username' type='text' />
+                            <label htmlFor='username'>Username</label>
+                            <Field id='username' name='username' type='text' />
 
-                        <label htmlFor='password'>Password</label>
-                        <Field id='password' name='password' type='password' autoComplete="current-password" />
+                            <label htmlFor='password'>Password</label>
+                            <Field id='password' name='password' type='password' autoComplete="current-password" />
 
-                        <button type='submit' className='mt-10 border rounded-md'>Confirm</button>
-                    </Form>
+                            <button type='submit' className='mt-10 border rounded-md' disabled={!!errors.name}>Confirm</button>
+                        </Form>
+                    )}
                 </Formik>
             </Modal>
 
