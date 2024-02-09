@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { ServerConnectionsInfosType } from '../../interfaces/servers'
 
 const addServer = async ({
     name,
@@ -7,14 +8,7 @@ const addServer = async ({
     port,
     username,
     password,
-}: {
-    name: string
-    type: string
-    host: string
-    port: string
-    username: string
-    password: string
-}): Promise<{ status: number; data: any }> => {
+}: ServerConnectionsInfosType): Promise<{ status: number; data: any }> => {
     const res = await axios.post('/api/lowdb', {
         name,
         type,
@@ -32,4 +26,12 @@ const removeServer = async (name: string): Promise<{ status: number }> => {
     return { status: res.status }
 }
 
-export { addServer, removeServer }
+const modifyServer = async (
+    name: string,
+    values: ServerConnectionsInfosType
+): Promise<{ status: number; data: any }> => {
+    const res = await axios.put(`/api/lowdb/${name}`, values)
+    return { status: res.status, data: res.data }
+}
+
+export { addServer, removeServer, modifyServer }

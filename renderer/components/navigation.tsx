@@ -8,6 +8,7 @@ import { addServer } from '../lib/api/api'
 import toast, { Toaster } from 'react-hot-toast'
 import { Formik, Form, Field } from 'formik'
 import { ServersContext } from '../contexts/servers'
+import { ServerConnectionsInfosType } from '../interfaces/servers'
 
 const Navigation = () => {
     const { servers, mutateData } = useContext(ServersContext)
@@ -16,14 +17,7 @@ const Navigation = () => {
     const [isOpenModal, setIsOpenModal] = useState(false)
     const router = useRouter()
 
-    const createServer = useCallback(async (values: {
-        name: string,
-        type: string,
-        host: string,
-        port: string,
-        username: string,
-        password: string,
-    }) => {
+    const createServer = useCallback(async (values: ServerConnectionsInfosType) => {
         const res = await addServer(values)
         if (res.status === 201) {
             setIsOpenModal(false)
@@ -112,9 +106,9 @@ const Navigation = () => {
                 <Formik
                     initialValues={{
                         name: '',
-                        type: 'MySQL',
+                        type: 'mysql',
                         host: '',
-                        port: '',
+                        port: null,
                         username: '',
                         password: '',
                     }}
