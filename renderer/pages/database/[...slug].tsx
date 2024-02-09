@@ -2,20 +2,18 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import useTableData from '../../lib/hooks/useTableData'
 import { CircleStackIcon, TableCellsIcon } from '@heroicons/react/24/solid'
+import { TableData } from '../../interfaces/tables'
 type PropsRow = {
     row: Array<any>
+    columns: Array<{columnName}>
 }
 
-type PropsTable = {
-    data: Array<any>
-}
-
-const DynamicRow = ({ row }: PropsRow) => {
+const DynamicRow = ({ row, columns }: PropsRow) => {
     const cells = []
-    for (const prop in row) {
-        if (row[prop] instanceof Object) {
+    columns.forEach(({columnName}, index) => {
+        if (row[columnName] instanceof Object) {
             cells.push(
-                <td key={prop + 'properror'} className='truncate'>
+                <td key={columnName + 'properror'} className='truncate'>
                     Object too complex to be displayed
                 </td>
             )
@@ -23,36 +21,34 @@ const DynamicRow = ({ row }: PropsRow) => {
             cells.push(
                 <td
                     className='truncate whitespace-nowrap py-4 px-6 text-sm font-medium text-gray-900'
-                    key={prop}
+                    key={index}
                 >
-                    {row[prop]}
+                    {row[columnName]}
                 </td>
             )
         }
-    }
+    })
+
     return <tr className='border-b bg-white'>{cells}</tr>
 }
 
-const DynamicTable = ({ data }: PropsTable) => {
-    if (!data[0]) {
-        return <div></div>
-    }
+const DynamicTable = ({ data, columns }: TableData) => {
     const rows = []
     data.forEach((d, index) => {
-        rows.push(<DynamicRow key={index + 'row'} row={d} />)
+        rows.push(<DynamicRow key={index + 'row'} row={d} columns={columns} />)
     })
 
     return (
         <table className='max-w-full'>
             <thead className='bg-gray-50 '>
                 <tr>
-                    {Object.getOwnPropertyNames(data[0]).map((property) => (
+                    {columns.map((column) => (
                         <th
                             scope='col'
-                            className='py-3 px-6 text-left text-xs font-medium uppercase tracking-wider text-gray-700 '
-                            key={property}
+                            className={`py-3 px-6 text-left text-xs font-medium uppercase tracking-wider text-gray-700`}
+                            key={column.columnName}
                         >
-                            {property}
+                            {column.isPrimaryKey && '🔑'} {column.columnName} {column.isForeignKey && '*'}
                         </th>
                     ))}
                 </tr>
@@ -86,7 +82,9 @@ const Database = () => {
                 {tableName}
             </h2>
 
-            <DynamicTable data={tableData} />
+            {tableData && (
+                <DynamicTable {...tableData} />
+            )}
         </div>
     )
 }

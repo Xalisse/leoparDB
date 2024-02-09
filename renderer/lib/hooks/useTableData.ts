@@ -1,8 +1,9 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
+import { TableData } from '../../interfaces/tables'
 
 const useTableData = (databaseName: string, tableName: string) => {
-    const [tableData, setTableData] = useState<any[]>([])
+    const [tableData, setTableData] = useState<TableData>(null)
 
     useEffect(() => {
         if (!databaseName || !tableName) return
