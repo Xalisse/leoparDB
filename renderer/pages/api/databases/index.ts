@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { createConnection } from 'typeorm'
-import { Database } from '../../../interfaces'
+import { DataSource } from 'typeorm'
+import { DatabaseType } from '../../../interfaces/databases'
 
 export default async function handler(
     req: NextApiRequest,
@@ -11,7 +11,7 @@ export default async function handler(
         method,
     } = req
     if (method === 'POST') {
-        const db = await createConnection({
+        const db = new DataSource({
             type,
             host,
             port,
@@ -21,8 +21,10 @@ export default async function handler(
             keepAlive: 100,
         })
         try {
+            const appDataSource = await db.initialize()
+            const queryRunner = appDataSource.createQueryRunner()
             const databases: { table_name: string; table_schema: string }[] =
-                await db.query(
+                await queryRunner.manager.query(
                     "SELECT table_name as table_name, table_schema as table_schema FROM information_schema.tables WHERE table_type='BASE TABLE'"
                 )
             let groups = {}
@@ -33,15 +35,15 @@ export default async function handler(
                 }
                 groups[groupName].push(database.table_name)
             }
-            const result: Database[] = []
+            const result: DatabaseType[] = []
             for (let groupName in groups) {
                 result.push({ name: groupName, tables: groups[groupName] })
             }
-            db.close()
+            db.destroy()
             res.status(200).json(result)
         } catch (err) {
             console.error(err)
-            db.close()
+            db.destroy()
             res.status(500).end('Error while fetching database')
         }
     } else {

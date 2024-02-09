@@ -17,10 +17,6 @@ const modifyServer = async (name: string, values: ServerConnectionsInfosType) =>
     const db = await JSONFilePreset('lowdbStorage/servers.json', defaultData)
     db.data.servers = db.data.servers.map((server) => {
         if (server.name === name) {
-            console.log('new values', {
-                ...server,
-                ...values
-            })
             return {
                 ...server,
                 ...values

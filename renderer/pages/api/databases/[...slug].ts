@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { createConnection } from 'typeorm'
+import { DataSource } from 'typeorm'
 
 export default async function handler(
     req: NextApiRequest,
@@ -11,10 +11,10 @@ export default async function handler(
         query: { slug },
     } = req
 
-    const [databaseName, tableName] = slug
+    const [databaseName, tableName] = slug as string[]
 
     if (method === 'POST') {
-        const db = await createConnection({
+        const db = new DataSource({
             type,
             host,
             port,
@@ -26,8 +26,13 @@ export default async function handler(
             keepAlive: 100,
         })
 
-        const data = await db.query(`SELECT * FROM ${tableName} LIMIT ${20}`)
-        db.close()
+        const appDataSource = await db.initialize()
+        const queryRunner = appDataSource.createQueryRunner()
+        const data = await queryRunner.manager.query(
+            `SELECT * FROM ${tableName} LIMIT ${20}`
+        )
+
+        db.destroy()
         res.status(200).json(data)
     }
 }
