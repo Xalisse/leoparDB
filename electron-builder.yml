@@ -1,6 +1,6 @@
 appId: com.example.nextron
-productName: My Nextron App
-copyright: Copyright © 2018 Yoshihide Shiono
+productName: LeoparDB
+copyright: Copyright © 2021 Valentine Lejeune
 directories:
   output: dist
   buildResources: resources
