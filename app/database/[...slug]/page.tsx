@@ -1,15 +1,17 @@
-import { useRouter } from 'next/router'
+'use client'
+
 import { useEffect, useState } from 'react'
 import useTableData from '../../lib/hooks/useTableData'
 import { CircleStackIcon, TableCellsIcon } from '@heroicons/react/24/solid'
 import { TableData } from '../../interfaces/tables'
+
 type PropsRow = {
     row: Array<any>
     columns: Array<{columnName}>
 }
 
 const DynamicRow = ({ row, columns }: PropsRow) => {
-    const cells = []
+    const cells: React.JSX.Element[] = []
     columns.forEach(({columnName}, index) => {
         if (row[columnName] instanceof Object) {
             cells.push(
@@ -33,7 +35,7 @@ const DynamicRow = ({ row, columns }: PropsRow) => {
 }
 
 const DynamicTable = ({ data, columns }: TableData) => {
-    const rows = []
+    const rows: React.JSX.Element[] = []
     data.forEach((d, index) => {
         rows.push(<DynamicRow key={index + 'row'} row={d} columns={columns} />)
     })
@@ -58,18 +60,17 @@ const DynamicTable = ({ data, columns }: TableData) => {
     )
 }
 
-const Database = () => {
-    const router = useRouter()
-    const [databaseName, setDatabaseName] = useState<string>()
-    const [tableName, setTableName] = useState<string>()
+const Database = ({ params }: { params: { slug: string[] } }) => {
+    const [databaseName, setDatabaseName] = useState<string>('')
+    const [tableName, setTableName] = useState<string>('')
     const tableData = useTableData(databaseName, tableName)
 
     useEffect(() => {
-        if (!router.isReady) return
+        if (!params) return
 
-        setDatabaseName(router.query.slug[0])
-        setTableName(router.query.slug[1])
-    }, [router.isReady, router.asPath])
+        setDatabaseName(params.slug[0])
+        setTableName(params.slug[1])
+    }, [params])
 
     return (
         <div>

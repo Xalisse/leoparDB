@@ -39,7 +39,7 @@ const useAllServers = () => {
             serversConnections.find((server) => db.name === server.name)
         )
 
-        const fetchPromises = []
+        const fetchPromises: Promise<void>[] = []
         serversConnections.forEach((server) => {
             if (newDb.find((db) => db.name === server.name)) {
                 return

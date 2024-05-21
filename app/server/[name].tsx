@@ -1,11 +1,11 @@
 import { useRouter } from "next/router"
-import Modal from "../../components/common/modal"
+import Modal from "../components/common/modal"
 import { useContext, useMemo, useState } from "react"
-import { modifyServer, removeServer } from "../../lib/api/api"
+import { modifyServer, removeServer } from "../lib/api/api"
 import toast, { Toaster } from "react-hot-toast"
-import { ServersContext } from "../../contexts/servers"
+import { ServersContext } from "../contexts/servers"
 import { Formik, Form, Field } from "formik"
-import { ServerConnectionsInfosType } from "../../interfaces/servers"
+import { ServerConnectionsInfosType } from "../interfaces/servers"
 
 const Server = () => {
     const {servers, mutateData} = useContext(ServersContext)

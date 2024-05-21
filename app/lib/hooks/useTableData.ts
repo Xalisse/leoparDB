@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { TableData } from '../../interfaces/tables'
 
 const useTableData = (databaseName: string, tableName: string) => {
-    const [tableData, setTableData] = useState<TableData>(null)
+    const [tableData, setTableData] = useState<TableData>()
 
     useEffect(() => {
         if (!databaseName || !tableName) return

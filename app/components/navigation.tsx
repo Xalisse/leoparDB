@@ -1,21 +1,25 @@
+'use client'
+
 import { Disclosure } from '@headlessui/react'
 import Link from 'next/link'
 import { useCallback, useContext, useEffect, useState } from 'react'
 import { ChevronRightIcon, CircleStackIcon, PlusIcon, TableCellsIcon, XMarkIcon } from '@heroicons/react/24/solid'
-import { useRouter } from 'next/router'
 import Modal from './common/modal'
 import { addServer } from '../lib/api/api'
 import toast, { Toaster } from 'react-hot-toast'
 import { Formik, Form, Field } from 'formik'
 import { ServersContext } from '../contexts/servers'
 import { ServerConnectionsInfosType } from '../interfaces/servers'
+import { usePathname } from 'next/navigation'
 
 const Navigation = () => {
+    const pathname = usePathname()
+    
     const { servers, mutateData } = useContext(ServersContext)
     const [selectedTable, setSelectedTable] =
         useState<{ database: string; table: string }>()
     const [isOpenModal, setIsOpenModal] = useState(false)
-    const router = useRouter()
+
 
     const createServer = useCallback(async (values: ServerConnectionsInfosType) => {
         const res = await addServer(values)
@@ -34,13 +38,15 @@ const Navigation = () => {
     }, [])
 
     useEffect(() => {
-        if (router.query.slug && router.query.slug.length === 2) {
+        const slugs = pathname.split('/').filter(Boolean)
+        if (slugs[0] === 'database' && slugs.length === 3) {
             setSelectedTable({
-                database: router.query.slug[0],
-                table: router.query.slug[1],
+                database: slugs[1],
+                table: slugs[2],
             })
+
         }
-    }, [router.query.slug])
+    }, [pathname])
 
     return (
         <div className='h-screen max-h-screen overflow-scroll flex flex-col gap-4 bg-slate-100 px-2 shadow-md'>

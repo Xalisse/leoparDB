@@ -1,5 +1,5 @@
 import { JSONFilePreset } from "lowdb/node"
-import { ServerConnectionsInfosType } from "../../../interfaces/servers"
+import { ServerConnectionsInfosType } from "../../interfaces/servers"
 
 const removeServer = async (name: string) => {
     const defaultData: { servers: ServerConnectionsInfosType[] } = {
@@ -27,23 +27,29 @@ const modifyServer = async (name: string, values: ServerConnectionsInfosType) =>
     await db.write()
 }
 
+export async function POST(request: Request, { params }: { params: { slug: string } }) {
+    console.log('🌿 ~ POST ~ params:', params)
 
-export default async function handler(req, res) {
-    const {
-        method,
-        body
-    } = req
-    const { name } = req.query
 
-    if (req.method === 'DELETE') {
-        await removeServer(name)
-        res.status(200).end()
-    } else if (req.method === 'PUT') {
-        const { name: newName, type, host, port, username, password } = body
-        await modifyServer(name, { name: newName, type, host, port, username, password })
-        res.status(200).end()
-    }  else {
-        res.setHeader('Allow', ['DELETE', 'PUT'])
-        res.status(405).end(`Method ${method} Not Allowed`)
-    }
 }
+
+
+// export default async function handler(req, res) {
+//     const {
+//         method,
+//         body
+//     } = req
+//     const { name } = req.query
+
+//     if (req.method === 'DELETE') {
+//         await removeServer(name)
+//         res.status(200).end()
+//     } else if (req.method === 'PUT') {
+//         const { name: newName, type, host, port, username, password } = body
+//         await modifyServer(name, { name: newName, type, host, port, username, password })
+//         res.status(200).end()
+//     }  else {
+//         res.setHeader('Allow', ['DELETE', 'PUT'])
+//         res.status(405).end(`Method ${method} Not Allowed`)
+//     }
+// }

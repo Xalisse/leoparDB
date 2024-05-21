@@ -1,3 +1,5 @@
+'use client'
+
 import { createContext } from "react"
 import { ServerWithDatabasesType, UnreachableDatabaseType } from "../interfaces/servers"
 import useAllServers from "../lib/hooks/useAllServers"
