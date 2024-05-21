@@ -1,7 +1,7 @@
 import { JSONFilePreset } from 'lowdb/node'
 import { ServerConnectionsInfosType } from '../../interfaces/servers'
 
-const getServersInfos = async (): Promise<ServerConnectionsInfosType[]> => {
+export const getServersInfos = async (): Promise<ServerConnectionsInfosType[]> => {
     const defaultData: { servers: ServerConnectionsInfosType[] } = {
         servers: [],
     }

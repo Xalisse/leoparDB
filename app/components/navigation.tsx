@@ -18,6 +18,7 @@ const Navigation = () => {
     const { servers, mutateData } = useContext(ServersContext)
     const [selectedTable, setSelectedTable] =
         useState<{ database: string; table: string }>()
+    const [selectedServer, setSelectedServer] = useState<string>()
     const [isOpenModal, setIsOpenModal] = useState(false)
 
 
@@ -39,13 +40,15 @@ const Navigation = () => {
 
     useEffect(() => {
         const slugs = pathname.split('/').filter(Boolean)
-        if (slugs[0] === 'database' && slugs.length === 3) {
+        if (slugs[0] === 'database' && slugs.length === 4) {
             setSelectedTable({
-                database: slugs[1],
-                table: slugs[2],
+                database: slugs[2],
+                table: slugs[3],
             })
+            setSelectedServer(slugs[1])
 
         }
+            console.log('🌿 ~ useEffect ~ slugs[2]:', slugs[2])
     }, [pathname])
 
     return (
@@ -60,7 +63,7 @@ const Navigation = () => {
                 {!('error' in server) && server.databases.map((database) => (
                     <Disclosure
                         key={database.name}
-                        defaultOpen={selectedTable?.database === database.name}
+                        defaultOpen={selectedTable?.database === database.name && selectedServer === server.name}
                     >
                         {({ open }) => (
                             <>
@@ -79,7 +82,7 @@ const Navigation = () => {
                                     {database.tables.map((table) => (
                                         <Link
                                             key={table}
-                                            href={`/database/${database.name}/${table}`}
+                                            href={`/database/${server.name}/${database.name}/${table}`}
                                             passHref
                                         >
                                             <div

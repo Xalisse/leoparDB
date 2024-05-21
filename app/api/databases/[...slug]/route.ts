@@ -1,24 +1,26 @@
 import { DataSource } from 'typeorm'
+import { ServerConnectionsInfosType } from '../../../interfaces/servers'
 
-
-export async function POST(request: Request, { params }: { params: { slug: any } }) {
-    console.log('🌿 ~ POST ~ params:', params)
-    const [databaseName, tableName] = params.slug as string[]
-    const { type, host, port, username, password } = await request.json()
-    
+export const getData = async (
+    serverInfos: Omit<ServerConnectionsInfosType, 'name'>,
+    databaseName, 
+    tableName
+) => {
     const db = new DataSource({
-        type,
-        host,
-        port,
-        username,
-        password,
+        type: serverInfos.type,
+        host: serverInfos.host,
+        port: serverInfos.port,
+        username: serverInfos.username,
+        password: serverInfos.password,
         database: databaseName,
         logging: false,
         name: `databasestables${databaseName}`,
-        keepAlive: 100,
     })
 
     const appDataSource = await db.initialize()
+
+    // TODO: gérer erreur de connexion à la base de données
+
     const queryRunner = appDataSource.createQueryRunner()
     const data = await queryRunner.manager.query(
         `SELECT * FROM ${tableName} LIMIT ${20}`
@@ -70,5 +72,19 @@ export async function POST(request: Request, { params }: { params: { slug: any }
     })
 
     db.destroy()
+    return { data, columns }
+}
+
+
+export async function POST(request: Request, { params }: { params: { slug: any } }) {
+    const [databaseName, tableName] = params.slug as string[]
+    const { type, host, port, username, password } = await request.json()
+    
+    const { data, columns } = await getData(
+        { type, host, port, username, password },
+        databaseName,
+        tableName
+    )
+    
     return Response.json({ data, columns })
 }

@@ -1,9 +1,8 @@
-'use client'
-
-import { useEffect, useState } from 'react'
-import useTableData from '../../lib/hooks/useTableData'
 import { CircleStackIcon, TableCellsIcon } from '@heroicons/react/24/solid'
 import { TableData } from '../../interfaces/tables'
+import { ServerConnectionsInfosType } from '../../interfaces/servers'
+import { getData } from '../../api/databases/[...slug]/route'
+import { getServersInfos } from '../../api/lowdb/route'
 
 type PropsRow = {
     row: Array<any>
@@ -60,17 +59,28 @@ const DynamicTable = ({ data, columns }: TableData) => {
     )
 }
 
-const Database = ({ params }: { params: { slug: string[] } }) => {
-    const [databaseName, setDatabaseName] = useState<string>('')
-    const [tableName, setTableName] = useState<string>('')
-    const tableData = useTableData(databaseName, tableName)
+const Database = async ({ params: { slug } }: { params: { slug: string[] } }) => {
+    const [serverName, databaseName, tableName] = slug
+    const defaultData: { servers: ServerConnectionsInfosType[] } = {
+        servers: [],
+    }
+    const currentServer = (await getServersInfos()).find(
+        (server) => server.name === serverName
+    )
 
-    useEffect(() => {
-        if (!params) return
+    if (!currentServer) {
+        return (
+            <div>
+                error
+            </div>
+        )
+    }
 
-        setDatabaseName(params.slug[0])
-        setTableName(params.slug[1])
-    }, [params])
+    const tableData = await getData(
+        currentServer,
+        databaseName,
+        tableName
+    )
 
     return (
         <div>

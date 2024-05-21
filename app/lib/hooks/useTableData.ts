@@ -1,23 +1,19 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { TableData } from '../../interfaces/tables'
+import { ServerConnectionsInfosType } from '../../interfaces/servers'
 
-const useTableData = (databaseName: string, tableName: string) => {
+const useTableData = (databaseName: string, tableName: string, database: ServerConnectionsInfosType) => {
+    console.log('🌿 ~ useTableData ~ database:', database)
     const [tableData, setTableData] = useState<TableData>()
 
     useEffect(() => {
-        if (!databaseName || !tableName) return
+        if (!databaseName || !tableName || !database) return
 
         async function getData() {
             const { data, status } = await axios.post(
                 `/api/databases/${databaseName}/${tableName}`,
-                {
-                    type: 'mysql',
-                    host: 'localhost',
-                    port: 3306,
-                    username: 'root',
-                    password: 'root',
-                },
+                database,
                 {
                     headers: {
                         'Content-Type': 'application/json',
