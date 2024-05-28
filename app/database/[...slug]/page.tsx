@@ -61,9 +61,7 @@ const DynamicTable = ({ data, columns }: TableData) => {
 
 const Database = async ({ params: { slug } }: { params: { slug: string[] } }) => {
     const [serverName, databaseName, tableName] = slug
-    const defaultData: { servers: ServerConnectionsInfosType[] } = {
-        servers: [],
-    }
+
     const currentServer = (await getServersInfos()).find(
         (server) => server.name === serverName
     )
@@ -76,11 +74,17 @@ const Database = async ({ params: { slug } }: { params: { slug: string[] } }) =>
         )
     }
 
-    const tableData = await getData(
-        currentServer,
-        databaseName,
-        tableName
-    )
+    let errorDataMessage: string | null = null
+    let tableData: TableData | null = null
+    try {
+        tableData = await getData(
+            currentServer,
+            databaseName,
+            tableName
+        )
+    } catch (error: any) {
+        errorDataMessage = error.sqlMessage
+    }
 
     return (
         <div>
@@ -95,6 +99,12 @@ const Database = async ({ params: { slug } }: { params: { slug: string[] } }) =>
 
             {tableData && (
                 <DynamicTable {...tableData} />
+            )}
+
+            {errorDataMessage && (
+                <div className='text-red-500'>
+                    {errorDataMessage}
+                </div>
             )}
         </div>
     )

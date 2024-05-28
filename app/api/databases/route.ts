@@ -13,6 +13,7 @@ export async function POST(request: Request) {
         logging: false,
         keepAlive: 100,
     })
+    
     try {
         const appDataSource = await db.initialize()
         const queryRunner = appDataSource.createQueryRunner()
