@@ -48,7 +48,6 @@ const Navigation = () => {
             setSelectedServer(slugs[1])
 
         }
-            console.log('🌿 ~ useEffect ~ slugs[2]:', slugs[2])
     }, [pathname])
 
     return (

@@ -1,5 +1,6 @@
 import { JSONFilePreset } from 'lowdb/node'
 import { ServerConnectionsInfosType } from '../../interfaces/servers'
+import { NextResponse } from 'next/server'
 
 export const getServersInfos = async (): Promise<ServerConnectionsInfosType[]> => {
     const defaultData: { servers: ServerConnectionsInfosType[] } = {
@@ -26,5 +27,7 @@ export async function GET() {
 export async function POST(request: Request) {
     const { name, type, host, port, username, password } = await request.json()
     await createServer({ name, type, host, port, username, password })
-    return Response.json({ status: 'success' })
+    return NextResponse.json({ message: 'success' }, {
+        status: 201,
+    })
 }
