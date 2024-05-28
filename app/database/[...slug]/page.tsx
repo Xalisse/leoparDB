@@ -1,6 +1,5 @@
 import { CircleStackIcon, TableCellsIcon } from '@heroicons/react/24/solid'
 import { TableData } from '../../interfaces/tables'
-import { ServerConnectionsInfosType } from '../../interfaces/servers'
 import { getData } from '../../api/databases/[...slug]/route'
 import { getServersInfos } from '../../api/lowdb/route'
 

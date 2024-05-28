@@ -1,16 +1,20 @@
-import { useRouter } from "next/router"
-import Modal from "../components/common/modal"
+'use client'
+
+import Modal from "../../components/common/modal"
 import { useContext, useMemo, useState } from "react"
-import { modifyServer, removeServer } from "../lib/api/api"
+import { modifyServer, removeServer } from "../../lib/api/api"
 import toast, { Toaster } from "react-hot-toast"
-import { ServersContext } from "../contexts/servers"
+import { ServersContext } from "../../contexts/servers"
 import { Formik, Form, Field } from "formik"
-import { ServerConnectionsInfosType } from "../interfaces/servers"
+import { ServerConnectionsInfosType } from "../../interfaces/servers"
+import { usePathname, useRouter } from "next/navigation"
 
 const Server = () => {
     const {servers, mutateData} = useContext(ServersContext)
     const router = useRouter()
-    const { name } = router.query as { name: string }
+    const pathname = usePathname()
+    const name = pathname.split('/')[2]
+    
     const [isOpenModalRemove, setIsOpenModalRemove] = useState(false)
     const [isOpenModalModify, setIsOpenModalModify] = useState(false)
 
@@ -82,7 +86,7 @@ const Server = () => {
                                 <label htmlFor='type'>Type</label>
                                 <Field id='type' name='type' as='select'>
                                     <option value='mysql'>MySQL</option>
-                                    <option value='postgres' disabled>PostgreSQL</option>
+                                    <option value='postgres'>PostgreSQL</option>
                                 </Field>
 
                                 <label htmlFor='host'>Host</label>

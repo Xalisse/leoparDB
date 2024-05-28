@@ -76,8 +76,8 @@ export const getData = async (
 }
 
 
-export async function POST(request: Request, { params }: { params: { slug: any } }) {
-    const [databaseName, tableName] = params.slug as string[]
+export async function POST(request: Request, { params }: { params: { slug: string[] } }) {
+    const [databaseName, tableName] = params.slug
     const { type, host, port, username, password } = await request.json()
     
     const { data, columns } = await getData(
